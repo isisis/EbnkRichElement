@@ -1,0 +1,219 @@
+<?php
+ // standard select html
+ $select = $this->select;
+ 
+ // mode
+ $collectionMode = $this->element->getCollectionMode();
+
+ // form element
+ $element = $this->element;
+ $elementId = $element->getAttribute('id');
+ $elementName = $element->getAttribute('name');
+ $elementLabel = $this->translate($element->getLabel());
+ $elementSize = $element->getAttribute('size');
+ $elementDisabled = $element->getAttribute('disabled');
+ $elementClass = $element->getAttribute('class');
+ 
+ // facade select properties
+ $facadeId = $element->getAttribute('id')."facade";
+ $facadeAddId = $element->getAttribute('id')."facadeAdd";
+ $facadeRemoveId = $element->getAttribute('id')."facadeRemove";
+ $requestRoute = $element->getRequestRoute();
+ $requestAction = $element->getRequestAction();
+ $requestParameter = $element->getRequestParameter();
+ $requestUrl = $this->url($requestRoute, array('action'=>$requestAction));
+ $isMulti = $element->getIsMulti();
+ $dialogId = $facadeId."Dialog";
+ $searchInputId = $facadeId."SearchInput";
+ $searchResultId = $facadeId."SearchResult";
+ $readOnly = $element->getReadOnly();
+
+ // set placeholders for collection mode
+ if($collectionMode) {
+	 $placeholder = "__index__";
+	 $elementOldId = $elementId;
+	 $elementId = $elementId.$placeholder;
+	 $facadeId = $facadeId.$placeholder;
+	 $facadeAddId = $facadeAddId.$placeholder;
+	 $facadeRemoveId = $facadeRemoveId.$placeholder;
+	 $dialogId = $dialogId.$placeholder;
+	 $searchInputId = $searchInputId.$placeholder;
+	 $searchResultId = $searchResultId.$placeholder;
+	 
+	 $replace = "id=\"".$elementOldId."\"";
+	 $replacement = "id=\"".$elementId."\""; 
+	 $select = str_replace($replace, $replacement, $select);	 	 	 	 	 
+ }
+?>
+
+<?php // backing select form element ?>
+<div style="display:none;">
+<?php echo $select; ?>
+</div>
+
+<?php // facade select form element  ?>
+<?php if(!$isMulti): ?>
+<div class="input-append">
+<?php endif; ?>
+	<select <?php if($isMulti): ?> multiple size="<?php echo $elementSize ?>" <?php endif; ?><?php if($elementDisabled): ?> disabled="disabled" <?php endif; ?><?php if($readOnly): ?>readonly="readonly" <?php endif; ?>id="<?php echo $facadeId; ?>" class="ebnkrichelement-searchselect-facade<?php if($elementClass): ?> <?php echo $elementClass; ?><?php endif; ?>"></select>
+<?php if($isMulti): ?>
+	<div class="btn-group btn-group-vertical">
+		<a class="btn" id="<?php echo $facadeAddId ?>"><?php echo $this->translate('Add'); ?></a>
+		<a class="btn" id="<?php echo $facadeRemoveId ?>"><?php echo $this->translate('Delete'); ?></a>
+	</div>
+<?php else: ?>
+	<a class="btn" id="<?php echo $facadeAddId ?>"><?php echo $this->translate('Select'); ?></a>	
+<?php endif; ?>
+<?php if(!$isMulti): ?>
+</div>
+<?php endif; ?>
+
+<?php // dialog ?>
+<div id="<?php echo $dialogId ?>">
+	<div>
+	<input type="text" id="<?php echo $searchInputId ?>" class="span6" />
+	</div>
+	<select multiple id="<?php echo $searchResultId ?>" size="<?php echo ($elementSize<30 && $elementSize>0) ? $elementSize : 20; ?>" class="span6">
+		
+	</select>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var elementId = '#<?php echo $elementId; ?>';
+		var facadeId = '#<?php echo $facadeId; ?>';
+		var facadeAddId = '#<?php echo $facadeAddId; ?>';
+		var facadeRemoveId = '#<?php echo $facadeRemoveId; ?>';
+		var requestUrl = '<?php echo $requestUrl; ?>';
+		var isMulti = <?php echo $isMulti ? 'true' : 'false'; ?>;
+		var readOnly = <?php echo $readOnly ? 'true' : 'false' ?>;
+		var dialogId = '#<?php echo $dialogId ?>';
+		var dialog = $(dialogId);
+		var searchInputId = '#<?php echo $searchInputId; ?>';
+		var searchResultId = '#<?php echo $searchResultId; ?>';
+		var optionItemTemplate = '<option selected="selected" value="%value%">%label%</option>';
+		
+		var initializeFacade = function() {
+			var options = $(elementId+" > option").clone();
+			$(facadeId).append(options);
+		}
+		var addToFacade = function() {
+			synchronize();
+		}
+		var removeFromFacade = function() {
+			synchronize();
+		}
+		var synchronize = function() {
+			removeDuplicateOptions();
+			var options = $(facadeId+" > option");			
+			var selectedOptions = $(facadeId+" > option:selected");			
+			options.each(function() {
+				if(this.selected) {
+					$(this).attr('selected','selected');
+				} else {
+					$(this).removeAttr('selected');
+				}
+			});
+			$(elementId+" > option").remove();
+			$(elementId).append(options.clone());
+		}
+		var removeDuplicateOptions = function() {
+			var optionMap = $(facadeId+" > option").each(function() {
+				$(this).siblings("[value="+ this.value+"]").remove();
+			});
+			return optionMap;
+		}
+		var unselectAll = function() {
+			$(facadeId+" > option").each(function() {
+				$(this).removeAttr('selected');
+			});
+		}
+		var search = function(searchKey) {
+			$.ajax({
+				type: 'POST',
+				url: requestUrl,
+				data: {key:searchKey},
+				success: function(data) {
+					var options = "";
+					$.each(data.data, function(i, item) {
+						var option = optionItemTemplate.replace("%value%", item[0]).replace("%label%", item[1]);
+						options += option;
+					});
+					$(searchResultId).empty();
+					$(searchResultId).append(options);	
+				}
+			});
+		}
+					
+		initializeFacade();
+		
+		$(facadeAddId).click(function() {
+			$(dialog).dialog('open');
+		});
+		
+		if(readOnly) {
+			$(facadeId).mousedown(function(e) {
+				e.preventDefault();
+				$(dialog).dialog('open');
+			});
+		}
+
+		$(facadeRemoveId).click(function() {
+			$(facadeId+" > option:selected").remove();
+			synchronize();
+		});
+		
+		$(facadeId).change(function() {
+			synchronize();
+		});
+		
+		$(searchInputId).keyup(function(e) {
+			var searchKey = this.value;
+			if(searchKey.length > 1) {
+				search(searchKey);
+			}
+		});
+		
+		$(dialog).dialog({
+			 resizable:false,
+			 autoOpen:false,
+			 modal:true,
+			 title:'<?php echo $elementLabel ?>',
+			 closeOnEscape: true,
+			 position:'center',	
+			 width: 600,		 		 
+			 buttons: [
+				{
+					text: "<?php echo $this->translate('Search'); ?>",
+					class: "btn",
+					click: function() {
+						var searchKey = $(searchInputId).val();
+						if(searchKey.length > 1) { 
+							search(searchKey);
+						}
+					},
+				},
+				{
+					text: "<?php echo $this->translate('Add'); ?>",
+					class: "btn",
+					click: function() {
+						if(!isMulti) {
+							unselectAll();
+						}
+						var selectedOptions = $(searchResultId+" > option:selected");						
+						$(facadeId).append(selectedOptions);
+						synchronize();
+						$(this).dialog("close");						
+					},
+				},
+				{
+					text: "<?php echo $this->translate('Close'); ?>",
+					class: "btn",
+					click: function() {
+						$(this).dialog("close");
+					},
+				},
+			]
+		});
+	});
+</script>
