@@ -119,4 +119,4 @@ Image showing opened up dialog of the SearchSelect element. The dialog will open
 
 At disabled elements the dialog will open up when you click on the select field. Buttons are being translated from the translator to german in my app. Translation depends on your current locale.
 
-As you can see behint, I'm using the SearchSelect inside a FormCollection. To make it work correctly inside collection, you want to set the *collection_mode* option to *true* when initializing the element.
+As you can see behind, I'm using the SearchSelect inside a FormCollection here. To make it work correctly inside collection, you want to set the *collection_mode* option to *true* when initializing the element.
