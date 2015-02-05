@@ -18,7 +18,7 @@ The Form Elements are based on JQuery and JQuery UI, so you want to add the js f
 
 ### SearchSelect
 Basic initialization of EbnkRichElement\Form\Element\SearchSelect in your form should look like this
-```
+```php
 		$this->add(array(
 			'type' => 'EbnkRichElement\Form\Element\SearchSelect',
 			'name' => 'nameOfYourFormElement',
@@ -28,15 +28,15 @@ Basic initialization of EbnkRichElement\Form\Element\SearchSelect in your form s
 			'options' => array(
 				'label' => 'YourLabel',
 				'property' => 'name',
-            	'request_route' => 'route/subroute',
-            	'request_action' => 'searchSelect',
-            	'is_multi' => false,
-              'value_options' => array(
-                '0' => 'Option1',
-                '1' => 'Option2',
-                '2' => 'Option3',
-                '3' => 'Option4',
-              ),
+				'request_route' => 'route/subroute',
+				'request_action' => 'searchSelect',
+				'is_multi' => false,
+				'value_options' => array(
+					'0' => 'Option1',
+					'1' => 'Option2',
+					'2' => 'Option3',
+					'3' => 'Option4',
+				),
 			),
 		));
 ```
@@ -45,25 +45,25 @@ The options *request_route* and *request_action* should be an existing route in 
 Inside the requested controller action you will receive the *key* as a post parameter. You can use this parameter for your search logic and want to return JSON formatted data with additional options for the user.
 As I told my form element to invoke the *searchSelect* action, the controller action could look something like this:
 
-```
+```<?php
 	public function searchSelectAction() {
 		$results = array();
 		if($this->request->isPost()) {
 			$key = $this->request->getPost('key');
 			if($key != "" && strlen($key) > 0) {
-			  if($key == "k") {
-  				$results = array(
-  					array(4,"km"),
-  					array(5,"kg"),
-  				);
-				} elseif($key == "qm") {
-  				$results = array(
-  					array(6,"qm"),
-  				);
-				}
+				if($key == "k") {
+			  		$results = array(
+			  			array(4,"km"),
+			  			array(5,"kg"),
+			  		);
+			  	} elseif($key == "qm") {
+			  		$results = array(
+			  			array(6,"qm"),
+			  		);
+			  	}
 			}
 		}
-    	return new JsonModel(array('data'=>$results));
+		return new JsonModel(array('data'=>$results));
 	}
 ```
 
