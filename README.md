@@ -45,7 +45,7 @@ The options *request_route* and *request_action* should be an existing route in 
 Inside the requested controller action you will receive the *key* as a post parameter. You can use this parameter for your search logic and want to return JSON formatted data with additional options for the user.
 As I told my form element to invoke the *searchSelect* action, the controller action could look something like this:
 
-```<?php
+```php
 	public function searchSelectAction() {
 		$results = array();
 		if($this->request->isPost()) {
