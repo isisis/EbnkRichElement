@@ -106,4 +106,9 @@ This is how it works:
 			'YourModule\Form\Element\SomeElement' => 'yourModuleSomeElement',
 		),
 	),
+	'view_helpers' => array(
+		'invokables' => array(
+			'yourModuleSomeElement' => 'YourModule\Form\View\Helper\SomeElement',
+		),
+	),	
 ```
