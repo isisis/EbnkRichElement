@@ -27,7 +27,7 @@ The Form Elements are based on JQuery and JQuery UI, so you want to add the js f
 ## The Form Elements
 
 ### SearchSelect
-Basic initialization of EbnkRichElement\Form\Element\SearchSelect in your form should look like this
+Basic initialization of *EbnkRichElement\Form\Element\SearchSelect* in your form should look like this
 ```php
 		$this->add(array(
 			'type' => 'EbnkRichElement\Form\Element\SearchSelect',
