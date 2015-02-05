@@ -98,11 +98,11 @@ This modules gives you the flexibility to add custom form element renderers to y
 In this module the *formelent* view helper is also being overriden, but it enables you to add renderers from configuration. So you won't need to override it in other modules where you want to add custom elements.
 
 This is how it works:
-```
+```php
 	// in your module.config.php
 	'ebnkrichelement' => array(
 		'form_element_render' => array(
-			/* 'FormElementFQCN' => 'viewhelpername', */
+			// 'FormElementFQCN' => 'viewhelpername',
 			'YourModule\Form\Element\SomeElement' => 'yourModuleSomeElement',
 		),
 	),
