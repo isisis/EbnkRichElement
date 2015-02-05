@@ -11,6 +11,7 @@ Warning: Don't use this module for production yet, since it's in development sta
 	* [SearchSelect](#searchselect)
 	* [DoctrineSearchSelect](#doctrinesearchselect)
 * [Adding Custom Elements](#adding-custom-elements)
+* [Demo](#demo)
 
 ## Installation
 Download the zip of this repository and put the module directory into the /vendor directory inside your ZF2 Application.
@@ -112,3 +113,10 @@ This is how it works:
 		),
 	),	
 ```
+### Demo
+![EbnkRichElement-SearchSelect-Demo-1](demo/SearchSelect_demo1.png)
+Image showing opened up dialog of the SearchSelect element. The dialog will open up if you click on the add button next to the select field. 
+
+At disabled elements the dialog will open up when you click on the select field. Buttons are being translated from the translator to german in my app. Translation depends on your current locale.
+
+As you can see behint, I'm using the SearchSelect inside a FormCollection. To make it work correctly inside collection, you want to set the *collection_mode* option to *true* when initializing the element.
