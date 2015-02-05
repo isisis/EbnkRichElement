@@ -5,6 +5,13 @@ A [Zend Framework 2](http://framework.zend.com/manual/current/en/user-guide/over
 Warning: Don't use this module for production yet, since it's in development stage. Feel free to try it out and contribute or give me some code reviews and improvement tipps.
 
 # Documentation
+* [Installation](#installation)
+	* [Requirements](#requirements)
+* [The Form Elements](#the-form-elements)
+	* [SearchSelect](#searchselect)
+	* [DoctrineSearchSelect](#doctrinesearchselect)
+* [Adding Custom Elements](#adding-custom-elements)
+
 ## Installation
 Download the zip of this repository and put the module directory into the /vendor directory inside your ZF2 Application.
 Composer installation is comming soon.
