@@ -113,7 +113,7 @@ This is how it works:
 		),
 	),	
 ```
-### Demo
+# Demo
 ![EbnkRichElement-SearchSelect-Demo-1](demo/SearchSelect_demo1.png)
 Image showing opened up dialog of the SearchSelect element. The dialog will open up if you click on the add button next to the select field. 
 
