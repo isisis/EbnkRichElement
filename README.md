@@ -9,6 +9,16 @@ Warning: Don't use this module for production yet, since it's in development sta
 Download the zip of this repository and put the module directory into the /vendor directory inside your ZF2 Application.
 Composer installation is comming soon.
 
+Then introduce the module to your application in the *application.config.php*
+```php
+// ... config array ...
+	'modules' => array(       
+		// ... other modules ...
+		'EbnkRichElement',
+	),
+// ... config array ...	
+```
+
 ### Requirements
 The Form Elements are based on JQuery and JQuery UI, so you want to add the js files to the head of your markup first if you're not using JQuery yet.
 * http://jquery.com/download/
