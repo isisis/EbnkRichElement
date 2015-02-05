@@ -84,8 +84,26 @@ As I told my form element to invoke the *searchSelect* action, the controller ac
 	}
 ```
 
-As you don't want to cover all search queries the user could do, you can call a custom seach function of a repository class thats searches a database table with the key and format the data as I did here.
+Instead of *if* statement you could call a custom seach function of a repository class that searchs a database table with the key. Then you could format the data into arrays like I did it here.
 The first element in the array will be used for the *value* attribute of the option and the second one as the *text* thats presented to the user inside the select element.
 
 ### DoctrineSearchSelect
 ...
+
+## Adding Custom Elements
+This modules gives you the flexibility to add custom form element renderers to your application from configuration.
+
+> Many described solutions on the net tell you to override ZF2's *formelement* view helper to do so. The problem with this solution is - if another module overrides it as well and it's being loaded after your module in the bootstrap hierarchy, it's going to override your view helper and your form elements are not going to be rendered correctly.
+
+In this module the *formelent* view helper is also being overriden, but it enables you to add renderers from configuration. So you won't need to override it in other modules where you want to add custom elements.
+
+This is how it works:
+```
+	// in your module.config.php
+	'ebnkrichelement' => array(
+		'form_element_render' => array(
+			/* 'FormElementFQCN' => 'viewhelpername', */
+			'YourModule\Form\Element\SomeElement' => 'yourModuleSomeElement',
+		),
+	),
+```
