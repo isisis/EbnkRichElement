@@ -97,36 +97,19 @@
 			var options = $(elementId+" > option").clone();
 			$(facadeId).append(options);
 		}
-		var addToFacade = function() {
-			synchronize();
-		}
-		var removeFromFacade = function() {
-			synchronize();
-		}
 		var synchronize = function() {
-			removeDuplicateOptions();
 			var options = $(facadeId+" > option");			
-			var selectedOptions = $(facadeId+" > option:selected");			
-			options.each(function() {
-				if(this.selected) {
-					$(this).attr('selected','selected');
-				} else {
-					$(this).removeAttr('selected');
-				}
-			});
 			$(elementId+" > option").remove();
-			$(elementId).append(options.clone());
+			$(elementId).append(options.clone());			
 		}
 		var removeDuplicateOptions = function() {
 			var optionMap = $(facadeId+" > option").each(function() {
 				$(this).siblings("[value="+ this.value+"]").remove();
 			});
 			return optionMap;
-		}
-		var unselectAll = function() {
-			$(facadeId+" > option").each(function() {
-				$(this).removeAttr('selected');
-			});
+		}		
+		var removeAll = function() {
+			$(facadeId+" > option").remove();			
 		}
 		var search = function(searchKey) {
 			$.ajax({
@@ -159,11 +142,7 @@
 		}
 
 		$(facadeRemoveId).click(function() {
-			$(facadeId+" > option:selected").remove();
-			synchronize();
-		});
-		
-		$(facadeId).change(function() {
+			$(facadeId+" > option:selected").remove();		
 			synchronize();
 		});
 		
@@ -197,12 +176,16 @@
 					text: "<?php echo $this->translate('Add'); ?>",
 					class: "btn",
 					click: function() {
-						if(!isMulti) {
-							unselectAll();
-						}
-						var selectedOptions = $(searchResultId+" > option:selected");						
+						var selectedOptions;						
+						if(isMulti) {
+							selectedOptions = $(searchResultId+" > option:selected");
+						} else {
+							selectedOptions = $(searchResultId+" > option:selected:last");
+							removeAll();							
+						}						
 						$(facadeId).append(selectedOptions);
 						synchronize();
+						removeDuplicateOptions();						
 						$(this).dialog("close");						
 					},
 				},
