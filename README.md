@@ -11,6 +11,7 @@ Warning: Don't use this module for production yet, since it's in development sta
 	* [SearchSelect](#searchselect)
 	* [DoctrineSearchSelect](#doctrinesearchselect)
 * [Adding Custom Elements](#adding-custom-elements)
+* [ToDo](#todo)
 * [Demo](#demo)
 
 ## Installation
@@ -113,6 +114,11 @@ This is how it works:
 		),
 	),	
 ```
+
+# ToDo
+* some code cleaning
+* jquery-select2 element integration
+
 # Demo
 ![EbnkRichElement-SearchSelect-Demo-1](demo/SearchSelect_demo1.png)
 Image showing opened up dialog of the SearchSelect element. The dialog will open up if you click on the add button next to the select field. 
